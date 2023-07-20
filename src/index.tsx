@@ -4,7 +4,7 @@ export interface Document {
 }
 
 import { DittoProvider } from './DittoProvider';
-import { DittoContext } from './DittoContext';
+import { DittoContext, useDittoProxy } from './DittoContext';
 import {
   DittoProxy,
   useLiveQuery,
@@ -20,5 +20,6 @@ export {
   useLiveQuery,
   useMutations,
   usePresence,
+  useDittoProxy,
 };
 export type { DittoDocument };

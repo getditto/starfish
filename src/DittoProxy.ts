@@ -124,6 +124,10 @@ export class DittoProxy {
   stopObservingPresence(presenceObserverId: string): void {
     return Starfish.stopObservingPresence(presenceObserverId);
   }
+
+  getDittoInformation(): Promise<{ [key: string]: unknown }> {
+    return Starfish.getDittoInformation(this.appId);
+  }
 }
 
 /**

@@ -142,6 +142,18 @@ class Starfish: RCTEventEmitter {
         presenceObserverMap.removeValue(forKey: presenceObserverId)
     }
     
+    @objc(getDittoInformation:resolver:rejecter:)
+    func getDittoInformation(appId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        guard let ditto = dittoMap[appId] else {
+            rejecter("getDittoInformation error", "Failed to find a ditto instance with appId \(appId)", nil)
+            return
+        }
+        let response = [
+            "sdkVersion": ditto.sdkVersion
+        ]
+        resolver(NSDictionary(dictionary: response))
+    }
+    
     private func convertQueryParamsToPendingCursor(appId: String, queryParams: NSDictionary?) -> DittoPendingCursorOperation? {
         let collection = queryParams?.value(forKey: "collection") as? String
         let find = queryParams?.value(forKey: "find") as? String
