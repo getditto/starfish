@@ -7,12 +7,19 @@ struct LiveQueryAndSubscription {
 
 
 @objc(Starfish)
-class Starfish: NSObject {
+class Starfish: RCTEventEmitter {
     
     var dittoMap: [String: DittoSwift.Ditto] = [:]
     var liveQueryAndSubscriptionsMap: [String: LiveQueryAndSubscription] = [:]
     var subscriptionsMap: [String: DittoSubscription] = [:]
     var presenceObserverMap: [String: DittoObserver] = [:]
+    
+    override func supportedEvents() -> [String]! {
+        return [
+            "onLiveQueryUpdate",
+            "onPresenceUpdate"
+        ]
+    }
     
     @objc(createDitto:withOnlinePlaygroundToken:)
     func createDitto(appId: String, token: String) {
@@ -34,16 +41,19 @@ class Starfish: NSObject {
         try! ditto.startSync()
     }
     
-    @objc(liveQuery:queryParams:localOnly:callback:)
-    func liveQuery(appId: String, queryParams: NSDictionary, localOnly: Bool, callback: @escaping RCTResponseSenderBlock) {
+    
+    @objc(registerLiveQuery:queryParams:localOnly:liveQueryId:)
+    func registerLiveQuery(appId: String, queryParams: NSDictionary, localOnly: Bool, liveQueryId: String) {
         guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else {
             return
         }
-        let uuid = UUID().uuidString
-        let lq = cursor.observeLocal { docs, _ in
+        let lq = cursor.observeLocal { [weak self] docs, _ in
             let arrayOfDocuments = cursor.exec().map({ $0.value })
             let nsArray = NSArray(array: arrayOfDocuments)
-            callback([nsArray, uuid])
+            self?.sendEvent(withName: "onLiveQueryUpdate", body: NSDictionary(dictionary: [
+                "liveQueryId": liveQueryId,
+                "documents": nsArray
+            ]))
         }
         
         var sub: DittoSubscription? = nil
@@ -51,7 +61,7 @@ class Starfish: NSObject {
             sub = cursor.subscribe()
         }
         let lqAndSub = LiveQueryAndSubscription(liveQuery: lq, subscription: sub)
-        liveQueryAndSubscriptionsMap[uuid] = lqAndSub
+        liveQueryAndSubscriptionsMap[liveQueryId] = lqAndSub
     }
     
     @objc(stopLiveQuery:)

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDittoProxy } from './DittoContext';
 import type { DittoQueryParams } from './DittoQueryParams';
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import uuid from 'react-native-uuid';
 
 const LINKING_ERROR =
   `The package 'react-native-starfish' doesn't seem to be linked. Make sure: \n\n` +
@@ -19,6 +20,8 @@ const Starfish = NativeModules.Starfish
         },
       }
     );
+
+export const StarfishEventEmitter = new NativeEventEmitter(Starfish);
 
 export interface DittoDocument {
   _id: any;
@@ -81,12 +84,17 @@ export class DittoProxy {
     return Starfish.evict(this.appId, params);
   }
 
-  liveQuery(
+  registerLiveQuery(
     params: DittoQueryParams,
     localOnly: boolean,
-    callback: (documents: DittoDocument[], liveQueryId: string) => void
+    liveQueryId: string
   ) {
-    return Starfish.liveQuery(this.appId, params, localOnly, callback);
+    return Starfish.registerLiveQuery(
+      this.appId,
+      params,
+      localOnly,
+      liveQueryId
+    );
   }
 
   stopLiveQuery(liveQueryId: string): void {
@@ -144,11 +152,17 @@ export function useLiveQuery(
   const [documents, setDocuments] = useState<DittoDocument[]>([]);
   const dittoProxy = useDittoProxy();
   useEffect(() => {
+    let uuidString = uuid.v4();
     let l: string | undefined;
-    dittoProxy.liveQuery(params, !!localOnly, (docs, liveQueryId) => {
-      setDocuments(docs);
-      l = liveQueryId;
+
+    StarfishEventEmitter.addListener('onLiveQueryUpdate', (liveQueryUpdate) => {
+      if (liveQueryUpdate.liveQueryId === uuidString) {
+        setDocuments(liveQueryUpdate.documents);
+      }
     });
+
+    dittoProxy.registerLiveQuery(params, !!localOnly, uuidString);
+
     return () => {
       if (l) {
         dittoProxy.stopLiveQuery(l);

@@ -1,11 +1,13 @@
 #import <React/RCTBridgeModule.h>
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(Starfish, NSObject)
+@interface RCT_EXTERN_MODULE(Starfish, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(createDitto:(NSString *)appId withOnlinePlaygroundToken:(NSString *)token)
 RCT_EXTERN_METHOD(startDitto:(NSString *)appId)
 RCT_EXTERN_METHOD(stopDitto:(NSString *)appId)
-RCT_EXTERN_METHOD(liveQuery:(NSString*)appId queryParams:(NSDictionary*)queryParams localOnly:(BOOL) localOnly callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(registerLiveQuery:(NSString*)appId queryParams:(NSDictionary*)queryParams localOnly:(BOOL) localOnly liveQueryId:(NSString *)liveQueryId)
 RCT_EXTERN_METHOD(stopLiveQuery:(NSString*)liveQueryId)
 RCT_EXTERN_METHOD(subscribe:(NSString*)appId queryParams:(NSDictionary*)queryParams)
 RCT_EXTERN_METHOD(unsubscribe:(NSString*)subscriptionId)
