@@ -221,6 +221,19 @@ class StarfishModule(reactContext: ReactApplicationContext) :
     return cursorOperation
   }
 
+  @ReactMethod
+  fun getDittoInformation(appId: String, promise: Promise) {
+    val ditto = dittoMap[appId];
+    if (ditto == null) {
+      promise.reject("getDittoInformation error", "failed to get ditto information")
+      return
+    }
+    val dittoVersion = ditto.sdkVersion
+    val response = Arguments.createMap().apply {
+      putString("sdkVersion", dittoVersion)
+    }
+    promise.resolve(response)
+  }
 }
 
 /**

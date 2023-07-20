@@ -21,6 +21,8 @@ RCT_EXTERN_METHOD(upsert:(NSString*)appId collection:(NSString*)collection docum
                   rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(registerPresenceObserver:(NSString*)appId presenceObserverId:(NSString*)presenceObserverId)
 RCT_EXTERN_METHOD(stopPresenceObserver:)
+RCT_EXTERN_METHOD(getDittoInformation:(NSString*)appId resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup
 {
