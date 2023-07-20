@@ -14,7 +14,6 @@ import {
   type DittoDocument,
   useMutations,
 } from 'react-native-starfish';
-import CheckboxComponent from './Checkbox';
 
 interface Task extends DittoDocument {
   _id: string;
@@ -75,15 +74,23 @@ function MainPage() {
         />
       </View>
       <FlatList
+        style={styles.list}
         data={tasks}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <CheckboxComponent
-              isChecked={item.isCompleted}
-              onChecked={() => toggleComplete(item._id)}
-            />
-            <Text style={styles.itemText}>{item.body}</Text>
+            <Text
+              onPress={() => {
+                toggleComplete(item._id);
+              }}
+              style={
+                item.isCompleted
+                  ? styles.itemTextCompleted
+                  : styles.itemTextUnCompleted
+              }
+            >
+              {item.body}
+            </Text>
             <TouchableOpacity onPress={() => deleteTask(item._id)}>
               <Text style={styles.deleteText}>Delete</Text>
             </TouchableOpacity>
@@ -115,6 +122,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
     paddingLeft: 10,
   },
+  list: {
+    flex: 1,
+  },
   itemContainer: {
     flexDirection: 'row',
     marginBottom: 10,
@@ -122,8 +132,14 @@ const styles = StyleSheet.create({
   deleteText: {
     color: 'red',
   },
-  itemText: {
-    flex: 1,
+  itemTextUnCompleted: {
+    flexGrow: 1,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  itemTextCompleted: {
+    flexGrow: 1,
+    textDecorationLine: 'line-through',
     marginLeft: 10,
     marginRight: 10,
   },
