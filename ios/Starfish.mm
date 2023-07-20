@@ -19,8 +19,8 @@ RCT_EXTERN_METHOD(remove:(NSString*)appId queryParams:(NSDictionary*)queryParams
                   rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(upsert:(NSString*)appId collection:(NSString*)collection document:(NSDictionary*)document resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(observePresence:(NSString*)appId callback:(RCTResponseSenderBlock)callback)
-RCT_EXTERN_METHOD(stopObservingPresence:)
+RCT_EXTERN_METHOD(registerPresenceObserver:(NSString*)appId presenceObserverId:(NSString*)presenceObserverId)
+RCT_EXTERN_METHOD(stopPresenceObserver:)
 
 + (BOOL)requiresMainQueueSetup
 {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDittoProxy } from './DittoContext';
 import type { DittoQueryParams } from './DittoQueryParams';
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
@@ -117,17 +117,8 @@ export class DittoProxy {
     Starfish.stopSync(this.appId);
   }
 
-  observePresence(
-    callback: (presence: { [key: string]: unknown }) => void
-  ): string {
-    return Starfish.observePresence(this.appId, (presenceJSON: string) => {
-      try {
-        const presence = JSON.parse(presenceJSON);
-        callback(presence);
-      } catch (e) {
-        console.error('Error parsing presence', e);
-      }
-    });
+  registerPresenceObserver(presenceObserverId: string) {
+    Starfish.observePresence(this.appId, presenceObserverId);
   }
 
   stopObservingPresence(presenceObserverId: string): void {
@@ -176,33 +167,6 @@ export function useLiveQuery(
   }, []);
   return {
     documents,
-  };
-}
-
-/**
- * This hook will return a presence object that contains the current presence state of the DittoProxy.
- * @returns presence object
- * @example
- * ```tsx
- * const { presence } = usePresence();
- * console.log(presence);
- * ```
- */
-export function usePresence() {
-  const dittoProxy = useDittoProxy();
-  const [presence, setPresence] = React.useState({});
-
-  useEffect(() => {
-    let x = dittoProxy.observePresence((graph: { [key: string]: unknown }) => {
-      setPresence(graph);
-    });
-    return () => {
-      dittoProxy.stopObservingPresence(x);
-    };
-  }, [dittoProxy]);
-
-  return {
-    presence,
   };
 }
 
@@ -280,5 +244,43 @@ export function useMutations() {
     upsert,
     evict,
     remove,
+  };
+}
+
+/**
+ * A hook for observing a mesh network to changes from other peers.
+ */
+export function usePresence() {
+  const dittoProxy = useDittoProxy();
+  const [presence, setPresence] = useState<{ [key: string]: unknown }>({});
+  const [error, setError] = useState<Error | undefined>();
+
+  useEffect(() => {
+    const uuidString = uuid.v4() as string;
+    dittoProxy.registerPresenceObserver(uuidString);
+
+    let eventListener = StarfishEventEmitter.addListener(
+      'onPresenceUpdate',
+      (presenceUpdate) => {
+        if (presenceUpdate.presenceObserverId === uuidString) {
+          try {
+            setPresence(JSON.parse(presenceUpdate.presence));
+          } catch (e) {
+            setError(error);
+          }
+        }
+      }
+    );
+
+    return () => {
+      dittoProxy.stopObservingPresence(uuidString);
+      eventListener.remove();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return {
+    presence,
+    error,
   };
 }

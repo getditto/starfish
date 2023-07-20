@@ -122,20 +122,22 @@ class Starfish: RCTEventEmitter {
         resolver([NSArray(array: docIds)])
     }
     
-    @objc(observePresence:callback:)
-    func observePresence(appId: String, callback: @escaping RCTResponseSenderBlock) -> String? {
-        guard let ditto = dittoMap[appId] else  { return nil }
+    @objc(registerPresenceObserver:callback:)
+    func registerPresenceObserver(appId: String, presenceObserverId: String) {
+        guard let ditto = dittoMap[appId] else  { return }
         let observer = ditto.presence.observe { graph in
             guard let data = try? JSONEncoder().encode(graph) else { return }
             guard let jsonString = String(data: data, encoding: .utf8) else { return }
-            callback([jsonString])
+            self.sendEvent(withName: "onPresenceUpdate", body: [
+                "presenceObserverId": presenceObserverId,
+                "graph": jsonString
+            ])
         }
-        let uuid = UUID().uuidString
-        presenceObserverMap[uuid] = observer
-        return uuid
+        presenceObserverMap[presenceObserverId] = observer
     }
-    @objc(stopObservingPresence:)
-    func stopObservingPresence(presenceObserverId: String) {
+    
+    @objc(stopPresenceObserver:)
+    func stopPresenceObserver(presenceObserverId: String) {
         presenceObserverMap[presenceObserverId]?.stop()
         presenceObserverMap.removeValue(forKey: presenceObserverId)
     }

@@ -15,6 +15,7 @@ import live.ditto.Ditto
 import live.ditto.DittoIdentity
 import live.ditto.DittoLiveQuery
 import live.ditto.DittoPendingCursorOperation
+import live.ditto.DittoPresenceObserver
 import live.ditto.DittoRegister
 import live.ditto.DittoSortDirection
 import live.ditto.DittoSubscription
@@ -33,6 +34,7 @@ class StarfishModule(reactContext: ReactApplicationContext) :
   var dittoMap = mutableMapOf<String, Ditto>()
   var subscriptionsMap = mutableMapOf<String, Subscription>()
   var liveQueryAndSubscriptionsMap = mutableMapOf<String, LiveQueryAndSubscription>()
+  var presenceObserversMap = mutableMapOf<String, DittoPresenceObserver>()
 
   @ReactMethod
   fun createDitto(appId: String, token: String) {
@@ -136,6 +138,27 @@ class StarfishModule(reactContext: ReactApplicationContext) :
     liveQueryAndSubscriptionsMap[liveQueryId] = LiveQueryAndSubscription(lq, sub)
   }
 
+  @ReactMethod
+  fun registerPresenceObserver(appId: String, presenceObserverId: String) {
+    val ditto = dittoMap[appId] ?: return
+    val o = ditto.presence.observe { graph ->
+      val eventParams = Arguments.createMap().apply {
+        putString("presenceObserverId", presenceObserverId)
+        putString("graph", graph.json())
+      }
+      sendEvent(this.reactApplicationContext, "onPresenceUpdate", eventParams)
+    }
+    presenceObserversMap[presenceObserverId] = o
+  }
+
+  @ReactMethod
+  fun stopPresenceObserver(presenceObserverId: String) {
+    val o = presenceObserversMap[presenceObserverId] ?: return
+    o.close()
+    presenceObserversMap.remove(presenceObserverId)
+  }
+
+
   companion object {
     const val NAME = "Starfish"
   }
@@ -149,16 +172,27 @@ class StarfishModule(reactContext: ReactApplicationContext) :
       .emit(eventName, params)
   }
 
+  /**
+   * Do not remove this,
+   * It's necessary for compilation even though it's empty
+   */
   @ReactMethod
   fun addListener(type: String?) {
     // Keep: Required for RN built in Event Emitter Calls.
   }
-
+  /**
+   * Do not remove this,
+   * It's necessary for compilation even though it's empty
+   */
   @ReactMethod
   fun removeListeners(type: Int?) {
     // Keep: Required for RN built in Event Emitter Calls.
   }
 
+  /**
+   * This function will try to create a cursor from the appId and queryParams
+   * If the appId is not found, it will return null
+   */
   private fun convertQueryParamsToPendingCursor(appId: String, queryParams: ReadableMap): DittoPendingCursorOperation? {
     val collection = queryParams.getString("collection")
     val find = queryParams.getString("find")
