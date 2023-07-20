@@ -22,7 +22,7 @@ interface Task extends DittoDocument {
   isCompleted: boolean;
 }
 
-const MainPage = () => {
+function MainPage() {
   const [newTaskBody, setNewTaskBody] = React.useState('');
 
   const { documents } = useLiveQuery({
@@ -92,7 +92,7 @@ const MainPage = () => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
