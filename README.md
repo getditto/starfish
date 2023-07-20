@@ -112,6 +112,8 @@ const styles = StyleSheet.create({
 
 Now in child components you can use the Ditto hooks like so:
 
+# Live Query
+
 ```tsx
 import { useLiveQuery } from "react-native-starfish"
 
@@ -129,3 +131,21 @@ function MainPage() {
   )
 }
 ```
+
+# Mutations
+
+To use mutations, you have `upsert`, `remove`, and `evict`
+
+```tsx
+
+import { useLiveQuery, useMutations } from "react-native-starfish"
+
+function MyComponent() {
+  const { upsert, evict, remove } = useMutations()
+}
+```
+
+## Commentary
+
+* This experimental library _only supports_ Ditto's onlinePlayground mode for now
+* All fields will be interpreted as `DittoRegister`, this includes maps. So 
