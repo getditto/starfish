@@ -102,16 +102,24 @@ class Starfish: RCTEventEmitter {
         resolver([NSArray(array: arrayOfDocuments)])
     }
     
-    @objc(evict:queryParams:)
-    func evict(appId: String, queryParams: NSDictionary) {
-        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else { return }
-        cursor.evict()
+    @objc(evict:queryParams:resolver:rejecter:)
+    func evict(appId: String, queryParams: NSDictionary, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else {
+            rejecter("evict error", "Failed to find a ditto instance with appId \(appId)", nil)
+            return
+        }
+        let docIds = cursor.evict().compactMap({ $0.value })
+        resolver([NSArray(array: docIds)])
     }
     
-    @objc(remove:queryParams:)
-    func remove(appId: String, queryParams: NSDictionary) {
-        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else { return }
-        cursor.remove()
+    @objc(remove:queryParams:resolver:rejecter:)
+    func remove(appId: String, queryParams: NSDictionary, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else {
+            rejecter("remove error", "Failed to find a ditto instance with appId \(appId)", nil)
+            return
+        }
+        let docIds = cursor.remove().compactMap({ $0.value })
+        resolver([NSArray(array: docIds)])
     }
     
     @objc(observePresence:callback:)

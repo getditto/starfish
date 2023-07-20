@@ -83,7 +83,7 @@ function MainPage() {
               isChecked={item.isCompleted}
               onChecked={() => toggleComplete(item._id)}
             />
-            <Text>{item.body}</Text>
+            <Text style={styles.itemText}>{item.body}</Text>
             <TouchableOpacity onPress={() => deleteTask(item._id)}>
               <Text style={styles.deleteText}>Delete</Text>
             </TouchableOpacity>
@@ -97,6 +97,7 @@ function MainPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     width: '100%',
     paddingTop: 50,
     paddingHorizontal: 20,
@@ -116,12 +117,15 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 10,
   },
   deleteText: {
     color: 'red',
+  },
+  itemText: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 

@@ -10,7 +10,7 @@ const CheckboxComponent = (props: CheckboxProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.baseline} onPress={() => props.onChecked}>
-        {props.isChecked && <View style={styles.checked} />}
+        <View style={styles.checked} />
       </TouchableOpacity>
     </View>
   );

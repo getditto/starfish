@@ -148,4 +148,5 @@ function MyComponent() {
 ## Commentary
 
 * This experimental library _only supports_ Ditto's onlinePlayground mode for now
-* All fields will be interpreted as `DittoRegister`, this includes maps. So 
+* All fields will be interpreted as `DittoRegister`, this includes maps. This means each document is an `AddWinsMap`, every nested value will become a `DittoRegister`
+* This does not support `DittoAttachment` 

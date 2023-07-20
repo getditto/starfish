@@ -36,6 +36,11 @@ class StarfishModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun createDitto(appId: String, token: String) {
+
+    if (dittoMap.containsKey(appId)) {
+      return
+    }
+
     val androidDependencies = DefaultAndroidDittoDependencies(reactApplicationContext)
     val identity = DittoIdentity.OnlinePlayground(
       androidDependencies,
@@ -89,6 +94,28 @@ class StarfishModule(reactContext: ReactApplicationContext) :
     }
     val upsertedId = ditto.store.collection(collection).upsert(map)
     promise.resolve(upsertedId.value)
+  }
+
+  @ReactMethod
+  fun remove(appId: String, queryParams: ReadableMap, promise: Promise) {
+    val cursorOperation = convertQueryParamsToPendingCursor(appId, queryParams)
+    if (cursorOperation == null) {
+      promise.reject("remove error", "failed to remove document")
+      return
+    }
+    val removedDocumentIds = cursorOperation.remove()
+    promise.resolve(toWritableArray(removedDocumentIds.map { it.value }))
+  }
+
+  @ReactMethod
+  fun evict(appId: String, queryParams: ReadableMap, promise: Promise) {
+    val cursorOperation = convertQueryParamsToPendingCursor(appId, queryParams)
+    if (cursorOperation == null) {
+      promise.reject("evict error", "failed to remove document")
+      return
+    }
+    val evictedDocumentId = cursorOperation.evict()
+    promise.resolve(toWritableArray(evictedDocumentId.map { it.value }))
   }
 
   @ReactMethod
