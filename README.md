@@ -13,11 +13,6 @@ For iOS you will need Cocoapods on your machine
 npm install react-native-starfish
 ```
 
-## Running the examples
+## Running the example
 
-### Running the iOS Tasks Example
-
-1. Clone this repo
-2. Run `yarn` to install the dependencies
-3. `cd examples/ios`
-4. Run `pod install`
+See the example readme in (./example/README.md)

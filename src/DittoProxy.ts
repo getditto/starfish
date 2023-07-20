@@ -152,14 +152,17 @@ export function useLiveQuery(
   const [documents, setDocuments] = useState<DittoDocument[]>([]);
   const dittoProxy = useDittoProxy();
   useEffect(() => {
-    let uuidString = uuid.v4();
+    let uuidString = uuid.v4() as string;
     let l: string | undefined;
 
-    StarfishEventEmitter.addListener('onLiveQueryUpdate', (liveQueryUpdate) => {
-      if (liveQueryUpdate.liveQueryId === uuidString) {
-        setDocuments(liveQueryUpdate.documents);
+    let eventListener = StarfishEventEmitter.addListener(
+      'onLiveQueryUpdate',
+      (liveQueryUpdate) => {
+        if (liveQueryUpdate.liveQueryId === uuidString) {
+          setDocuments(liveQueryUpdate.documents);
+        }
       }
-    });
+    );
 
     dittoProxy.registerLiveQuery(params, !!localOnly, uuidString);
 
@@ -167,6 +170,7 @@ export function useLiveQuery(
       if (l) {
         dittoProxy.stopLiveQuery(l);
       }
+      eventListener.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

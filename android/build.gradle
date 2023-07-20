@@ -97,6 +97,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "live.ditto:ditto:4.3.0"
 }
 
 if (isNewArchitectureEnabled()) {

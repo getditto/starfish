@@ -7,7 +7,6 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 
 import React from 'react';
 import {
@@ -15,6 +14,7 @@ import {
   type DittoDocument,
   useMutations,
 } from 'react-native-starfish';
+import CheckboxComponent from './Checkbox';
 
 interface Task extends DittoDocument {
   _id: string;
@@ -79,9 +79,9 @@ const MainPage = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <CheckBox
-              value={item.isCompleted}
-              onValueChange={() => toggleComplete(item._id)}
+            <CheckboxComponent
+              isChecked={item.isCompleted}
+              onChecked={() => toggleComplete(item._id)}
             />
             <Text>{item.body}</Text>
             <TouchableOpacity onPress={() => deleteTask(item._id)}>
