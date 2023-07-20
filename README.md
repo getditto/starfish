@@ -2,30 +2,22 @@
 
 React Native Example
 
+# Requirements
+
+For iOS you will need Cocoapods on your machine
+
+
 ## Installation
 
 ```sh
 npm install react-native-starfish
 ```
 
-## Usage
+## Running the examples
 
-```js
-import { multiply } from 'react-native-starfish';
+### Running the iOS Tasks Example
 
-// ...
-
-const result = await multiply(3, 7);
-```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+1. Clone this repo
+2. Run `yarn` to install the dependencies
+3. `cd examples/ios`
+4. Run `pod install`

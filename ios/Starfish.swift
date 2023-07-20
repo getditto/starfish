@@ -14,11 +14,6 @@ class Starfish: NSObject {
     var subscriptionsMap: [String: DittoSubscription] = [:]
     var presenceObserverMap: [String: DittoObserver] = [:]
     
-    @objc(multiply:withB:withResolver:withRejecter:)
-    func multiply(a: Float, b: Float, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-        resolve(a*b)
-    }
-    
     @objc(createDitto:withOnlinePlaygroundToken:)
     func createDitto(appId: String, token: String) {
         if (dittoMap[appId] != nil) { return }
@@ -40,13 +35,15 @@ class Starfish: NSObject {
     }
     
     @objc(liveQuery:queryParams:localOnly:callback:)
-    func liveQuery(appId: String, queryParams: NSDictionary, localOnly: Bool, callback: @escaping RCTResponseSenderBlock) -> String? {
-        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else { return nil }
-        
+    func liveQuery(appId: String, queryParams: NSDictionary, localOnly: Bool, callback: @escaping RCTResponseSenderBlock) {
+        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else {
+            return
+        }
+        let uuid = UUID().uuidString
         let lq = cursor.observeLocal { docs, _ in
             let arrayOfDocuments = cursor.exec().map({ $0.value })
             let nsArray = NSArray(array: arrayOfDocuments)
-            callback([nsArray])
+            callback([nsArray, uuid])
         }
         
         var sub: DittoSubscription? = nil
@@ -54,9 +51,7 @@ class Starfish: NSObject {
             sub = cursor.subscribe()
         }
         let lqAndSub = LiveQueryAndSubscription(liveQuery: lq, subscription: sub)
-        let uuid = UUID().uuidString
         liveQueryAndSubscriptionsMap[uuid] = lqAndSub
-        return uuid
     }
     
     @objc(stopLiveQuery:)
@@ -80,11 +75,21 @@ class Starfish: NSObject {
                     newDocumentPayload[key] = DittoRegister(value: value)
                 }
             }
-            let upsertedDocumentId = try ditto.store[appId].upsert(document as? [String: Any?] ?? [:])
+            let upsertedDocumentId = try ditto.store[collection].upsert(document as? [String: Any?] ?? [:])
             resolver([upsertedDocumentId.value])
         } catch(let e) {
             rejecter("upsert error", e.localizedDescription, nil)
         }
+    }
+    
+    @objc(find:queryParams:resolver:rejecter:)
+    func find(appId: String, queryParams: NSDictionary, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else {
+            rejecter("find error", "there is no app with appId \(appId)", nil)
+            return
+        }
+        let arrayOfDocuments = cursor.exec().map({ $0.value })
+        resolver([NSArray(array: arrayOfDocuments)])
     }
     
     @objc(evict:queryParams:)
@@ -97,6 +102,24 @@ class Starfish: NSObject {
     func remove(appId: String, queryParams: NSDictionary) {
         guard let cursor = convertQueryParamsToPendingCursor(appId: appId, queryParams: queryParams) else { return }
         cursor.remove()
+    }
+    
+    @objc(observePresence:callback:)
+    func observePresence(appId: String, callback: @escaping RCTResponseSenderBlock) -> String? {
+        guard let ditto = dittoMap[appId] else  { return nil }
+        let observer = ditto.presence.observe { graph in
+            guard let data = try? JSONEncoder().encode(graph) else { return }
+            guard let jsonString = String(data: data, encoding: .utf8) else { return }
+            callback([jsonString])
+        }
+        let uuid = UUID().uuidString
+        presenceObserverMap[uuid] = observer
+        return uuid
+    }
+    @objc(stopObservingPresence:)
+    func stopObservingPresence(presenceObserverId: String) {
+        presenceObserverMap[presenceObserverId]?.stop()
+        presenceObserverMap.removeValue(forKey: presenceObserverId)
     }
     
     private func convertQueryParamsToPendingCursor(appId: String, queryParams: NSDictionary?) -> DittoPendingCursorOperation? {
