@@ -7,6 +7,7 @@ import { DittoProvider } from './DittoProvider';
 import { DittoContext, useDittoProxy } from './DittoContext';
 import {
   DittoProxy,
+  useAndroidPermissions,
   useLiveQuery,
   useMutations,
   usePresence,
@@ -29,6 +30,7 @@ export {
   useMutations,
   usePresence,
   useDittoProxy,
+  useAndroidPermissions,
   addressToString,
 };
 export type { Connection, ConnectionType, PresenceGraph, Peer, Address };

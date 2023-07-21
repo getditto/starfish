@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
-import { DittoProvider } from 'react-native-starfish';
+import { DittoProvider, useAndroidPermissions } from 'react-native-starfish';
 import { NavigationContainer } from '@react-navigation/native';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View, PermissionsAndroid } from 'react-native';
 
 import { DetailsScreen } from './DetailsScreen';
 
@@ -14,6 +14,16 @@ import { PresenceScreen } from './PresenceScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const { requestMissingPermissions } = useAndroidPermissions();
+
+  React.useEffect(() => {
+    (async () => {
+      const missingPermissions = requestMissingPermissions();
+      console.log('missingPermissions', missingPermissions);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <DittoProvider
       appId="fbb5220f-5907-4bbf-9e0d-f7b0b1984df6"

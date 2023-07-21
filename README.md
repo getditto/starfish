@@ -44,38 +44,29 @@ yarn add react-native-starfish
 
 ## Special Instructions for Android
 
-You need permissions for your Android app to handle P2P. [For a more comprehensive set of instructions you'll need to visit here](https://docs.ditto.live/android/installation#android-manifest-permissions)
+You'll need to ask Android for permissions when your app starts. An _easy_ way would be to use the `requestMissingPermissions` which is part of the `useAndroidPermissions` hook at the first render of the app. This is a one time call, so you can decide to call it whenever. 
 
-```xml
-<manifest
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+```tsx
+// other imports omitted for brevity
+import React, { useEffect } from "react"
+import { useAndroidPermissions } from "react-native-starfish"
 
-<uses-permission android:name="android.permission.BLUETOOTH"
-    android:maxSdkVersion="30" />
-<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
-    android:maxSdkVersion="30" />
-<uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"
-    tools:targetApi="s" />
-<uses-permission android:name="android.permission.BLUETOOTH_CONNECT"
-    tools:targetApi="s" />
-<uses-permission android:name="android.permission.BLUETOOTH_SCAN"
-    android:usesPermissionFlags="neverForLocation"
-    tools:targetApi="s" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
-    android:maxSdkVersion="32" />
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
-    android:maxSdkVersion="30" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-<uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
-    android:usesPermissionFlags="neverForLocation"
-    tools:targetApi="tiramisu" />
+function App() {
+  const { requestMissingPermissions } = useAndroidPermissions();
+
+  useEffect(() => {
+    // this will request missing permissions if there are any
+    requestMissingPermissions
+      .then(permissionStatuses => console.log(permissionStatuses))
+  }, [])
+  
+  return (
+    <DittoProvider {/* ... omitted for brevity */}>
+    </DittProvider>
+  )
+}
 ```
+
 
 ## Running the example
 

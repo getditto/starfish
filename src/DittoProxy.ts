@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDittoProxy } from './DittoContext';
 import type { DittoQueryParams } from './DittoQueryParams';
-import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import {
+  NativeModules,
+  NativeEventEmitter,
+  Platform,
+  type Permission,
+  PermissionsAndroid,
+  type PermissionStatus,
+} from 'react-native';
 import uuid from 'react-native-uuid';
 import type { PresenceGraph } from './PresenceGraph';
 
@@ -288,5 +295,41 @@ export function usePresence() {
   return {
     graph,
     error,
+  };
+}
+
+/**
+ * A hook used to find missing Android permissions so you can request them.
+ * @see https://reactnative.dev/docs/permissionsandroid
+ * @returns an array of missing android permissions necessary for ditto to run
+ */
+export function useAndroidPermissions() {
+  /**
+   * A hook used to find missing Android permissions so you can request them.
+   * If called on another platform, it will return an empty array.
+   * @see https://reactnative.dev/docs/permissionsandroid
+   * @returns an array of missing android permissions necessary for ditto to run
+   */
+  function getMissingAndroidPermissions(): Promise<Permission[]> {
+    if (Platform.OS !== 'android') {
+      return Promise.resolve([]);
+    }
+    return Starfish.getMissingAndroidPermissions();
+  }
+
+  /**
+   * Will request the necessary permissions for Ditto to run.
+   * @returns the permissions status of the requested permissions
+   */
+  async function requestMissingPermissions(): Promise<{
+    [key: string]: PermissionStatus;
+  }> {
+    const missingPermissions = await getMissingAndroidPermissions();
+    return PermissionsAndroid.requestMultiple(missingPermissions);
+  }
+
+  return {
+    getMissingAndroidPermissions,
+    requestMissingPermissions,
   };
 }
