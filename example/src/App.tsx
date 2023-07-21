@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { DittoProvider, useAndroidPermissions } from 'react-native-starfish';
 import { NavigationContainer } from '@react-navigation/native';
-import { Platform, StyleSheet, View, PermissionsAndroid } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { DetailsScreen } from './DetailsScreen';
 
@@ -18,8 +18,7 @@ export default function App() {
 
   React.useEffect(() => {
     (async () => {
-      const missingPermissions = requestMissingPermissions();
-      console.log('missingPermissions', missingPermissions);
+      requestMissingPermissions();
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
