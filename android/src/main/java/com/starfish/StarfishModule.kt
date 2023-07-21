@@ -20,6 +20,7 @@ import live.ditto.DittoRegister
 import live.ditto.DittoSortDirection
 import live.ditto.DittoSubscription
 import live.ditto.android.DefaultAndroidDittoDependencies
+import live.ditto.transports.DittoSyncPermissions
 import java.util.concurrent.Flow.Subscription
 
 class LiveQueryAndSubscription(val liveQuery: DittoLiveQuery, val subscription: DittoSubscription?)
@@ -234,6 +235,14 @@ class StarfishModule(reactContext: ReactApplicationContext) :
     }
     promise.resolve(response)
   }
+
+  @ReactMethod
+  fun getMissingAndroidPermissions(promise: Promise) {
+    val missingPermission = DittoSyncPermissions(reactApplicationContext).missingPermissions()
+    val list = Arguments.fromArray(missingPermission)
+    promise.resolve(list)
+  }
+
 }
 
 /**
