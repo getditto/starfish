@@ -256,7 +256,7 @@ export function useMutations() {
  */
 export function usePresence() {
   const dittoProxy = useDittoProxy();
-  const [presence, setPresence] = useState<{ [key: string]: unknown }>({});
+  const [graph, setGraph] = useState<{ [key: string]: unknown }>({});
   const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
@@ -268,7 +268,7 @@ export function usePresence() {
       (presenceUpdate) => {
         if (presenceUpdate.presenceObserverId === uuidString) {
           try {
-            setPresence(JSON.parse(presenceUpdate.presence));
+            setGraph(JSON.parse(presenceUpdate.presence));
           } catch (e) {
             setError(error);
           }
@@ -284,7 +284,7 @@ export function usePresence() {
   }, []);
 
   return {
-    presence,
+    graph,
     error,
   };
 }
