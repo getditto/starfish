@@ -12,6 +12,14 @@ import {
   usePresence,
 } from './DittoProxy';
 import type { DittoDocument } from './DittoDocument';
+import type {
+  Connection,
+  ConnectionType,
+  PresenceGraph,
+  Peer,
+  Address,
+} from './PresenceGraph';
+import { addressToString } from './PresenceGraph';
 
 export {
   DittoProvider,
@@ -21,5 +29,7 @@ export {
   useMutations,
   usePresence,
   useDittoProxy,
+  addressToString,
 };
+export type { Connection, ConnectionType, PresenceGraph, Peer, Address };
 export type { DittoDocument };

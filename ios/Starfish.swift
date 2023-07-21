@@ -122,7 +122,7 @@ class Starfish: RCTEventEmitter {
         resolver([NSArray(array: docIds)])
     }
     
-    @objc(registerPresenceObserver:callback:)
+    @objc(registerPresenceObserver:presenceObserverId:)
     func registerPresenceObserver(appId: String, presenceObserverId: String) {
         guard let ditto = dittoMap[appId] else  { return }
         let observer = ditto.presence.observe { graph in

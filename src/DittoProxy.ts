@@ -3,6 +3,7 @@ import { useDittoProxy } from './DittoContext';
 import type { DittoQueryParams } from './DittoQueryParams';
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 import uuid from 'react-native-uuid';
+import type { PresenceGraph } from './PresenceGraph';
 
 const LINKING_ERROR =
   `The package 'react-native-starfish' doesn't seem to be linked. Make sure: \n\n` +
@@ -118,11 +119,11 @@ export class DittoProxy {
   }
 
   registerPresenceObserver(presenceObserverId: string) {
-    Starfish.observePresence(this.appId, presenceObserverId);
+    Starfish.registerPresenceObserver(this.appId, presenceObserverId);
   }
 
-  stopObservingPresence(presenceObserverId: string): void {
-    return Starfish.stopObservingPresence(presenceObserverId);
+  stopPresenceObserver(presenceObserverId: string): void {
+    return Starfish.stopPresenceObserver(presenceObserverId);
   }
 
   getDittoInformation(): Promise<{ [key: string]: unknown }> {
@@ -256,7 +257,7 @@ export function useMutations() {
  */
 export function usePresence() {
   const dittoProxy = useDittoProxy();
-  const [graph, setGraph] = useState<{ [key: string]: unknown }>({});
+  const [graph, setGraph] = useState<PresenceGraph | undefined>();
   const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
@@ -268,7 +269,8 @@ export function usePresence() {
       (presenceUpdate) => {
         if (presenceUpdate.presenceObserverId === uuidString) {
           try {
-            setGraph(JSON.parse(presenceUpdate.presence));
+            let presenceGraphJSON = JSON.parse(presenceUpdate.graph);
+            setGraph(presenceGraphJSON);
           } catch (e) {
             setError(error);
           }
@@ -277,7 +279,7 @@ export function usePresence() {
     );
 
     return () => {
-      dittoProxy.stopObservingPresence(uuidString);
+      dittoProxy.stopPresenceObserver(uuidString);
       eventListener.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
