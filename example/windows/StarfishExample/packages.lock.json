@@ -2,26 +2,6 @@
   "version": 1,
   "dependencies": {
     "UAP,Version=v10.0.17763": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
-      "Faker.Net": {
-        "type": "Direct",
-        "requested": "[2.0.154, )",
-        "resolved": "2.0.154",
-        "contentHash": "pkabhT7wxNR1gkPO6ga77XdeqBblaE8a1oY47eMGGvM7DMZ9S8ARZrKkRWaPUNjGCOqtH3oeQSMuEPxd98ir4w==",
-        "dependencies": {
-          "NETStandard.Library": "2.0.3"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -34,10 +14,37 @@
           "NETStandard.Library": "2.0.3"
         }
       },
+      "Microsoft.UI.Xaml": {
+        "type": "Direct",
+        "requested": "[2.8.0, )",
+        "resolved": "2.8.0",
+        "contentHash": "vxdHxTr63s5KVtNddMFpgvjBjUH50z7seq/5jLWmmSuf8poxg+sXrywkofUdE8ZstbpO9y3FL/IXXUcPYbeesA==",
+        "dependencies": {
+          "Microsoft.Web.WebView2": "1.0.1264.42"
+        }
+      },
       "boost": {
         "type": "Transitive",
         "resolved": "1.76.0",
         "contentHash": "p+w3YvNdXL8Cu9Fzrmexssu0tZbWxuf6ywsQqHjDlKFE5ojXHof1HIyMC3zDLfLnh80dIeFcEUAuR2Asg/XHRA=="
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
+        }
+      },
+      "Faker.Net": {
+        "type": "Transitive",
+        "resolved": "2.0.154",
+        "contentHash": "pkabhT7wxNR1gkPO6ga77XdeqBblaE8a1oY47eMGGvM7DMZ9S8ARZrKkRWaPUNjGCOqtH3oeQSMuEPxd98ir4w==",
+        "dependencies": {
+          "NETStandard.Library": "2.0.3"
+        }
       },
       "Microsoft.Bcl.HashCode": {
         "type": "Transitive",
@@ -74,14 +81,6 @@
         "type": "Transitive",
         "resolved": "2.1.0",
         "contentHash": "ok+RPAtESz/9MUXeIEz6Lv5XAGQsaNmEYXMsgVALj4D7kqC8gveKWXWXbufLySR2fWrwZf8smyN5RmHu0e4BHA=="
-      },
-      "Microsoft.UI.Xaml": {
-        "type": "Transitive",
-        "resolved": "2.8.0",
-        "contentHash": "vxdHxTr63s5KVtNddMFpgvjBjUH50z7seq/5jLWmmSuf8poxg+sXrywkofUdE8ZstbpO9y3FL/IXXUcPYbeesA==",
-        "dependencies": {
-          "Microsoft.Web.WebView2": "1.0.1264.42"
-        }
       },
       "Microsoft.Web.WebView2": {
         "type": "Transitive",
@@ -230,20 +229,26 @@
           "Folly": "[1.0.0, )",
           "boost": "[1.76.0, )"
         }
+      },
+      "reactnativestarfish": {
+        "type": "Project",
+        "dependencies": {
+          "Ditto": "[4.4.0-experimental-uwp-support, )",
+          "Faker.Net": "[2.0.154, )",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "[6.2.9, )",
+          "Microsoft.ReactNative": "[1.0.0, )",
+          "Microsoft.ReactNative.Managed": "[1.0.0, )"
+        }
+      },
+      "rnscreens": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.ReactNative": "[1.0.0, )",
+          "Microsoft.UI.Xaml": "[2.8.0, )"
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-arm": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -255,6 +260,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {
@@ -269,17 +284,6 @@
       }
     },
     "UAP,Version=v10.0.17763/win10-arm-aot": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -291,6 +295,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {
@@ -305,17 +319,6 @@
       }
     },
     "UAP,Version=v10.0.17763/win10-arm64-aot": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -327,6 +330,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-arm64-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {
@@ -341,17 +354,6 @@
       }
     },
     "UAP,Version=v10.0.17763/win10-x64": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -363,6 +365,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {
@@ -377,17 +389,6 @@
       }
     },
     "UAP,Version=v10.0.17763/win10-x64-aot": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -399,6 +400,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {
@@ -413,17 +424,6 @@
       }
     },
     "UAP,Version=v10.0.17763/win10-x86": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -435,6 +435,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {
@@ -449,17 +459,6 @@
       }
     },
     "UAP,Version=v10.0.17763/win10-x86-aot": {
-      "Ditto": {
-        "type": "Direct",
-        "requested": "[4.4.0-experimental-uwp-support, )",
-        "resolved": "4.4.0-experimental-uwp-support",
-        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
-        "dependencies": {
-          "Microsoft.Bcl.HashCode": "1.1.1",
-          "Newtonsoft.Json": "13.0.1",
-          "PeterO.Cbor": "4.5.2"
-        }
-      },
       "Microsoft.NETCore.UniversalWindowsPlatform": {
         "type": "Direct",
         "requested": "[6.2.9, )",
@@ -471,6 +470,16 @@
           "Microsoft.Net.UWPCoreRuntimeSdk": "2.2.9",
           "NETStandard.Library": "2.0.3",
           "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.2.9"
+        }
+      },
+      "Ditto": {
+        "type": "Transitive",
+        "resolved": "4.4.0-experimental-uwp-support",
+        "contentHash": "suVU/tIqb9cyCEes3xfb0k0WnfzMHJ1J6Ab4PRXKKpRqnIbYv0Zqq8Rq201mAFIWUGVLG8U3hzj9Zg8eWlDnhQ==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "Newtonsoft.Json": "13.0.1",
+          "PeterO.Cbor": "4.5.2"
         }
       },
       "Microsoft.Web.WebView2": {

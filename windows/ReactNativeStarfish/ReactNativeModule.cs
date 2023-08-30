@@ -45,7 +45,7 @@ namespace ReactNativeStarfish
       _reactContext = reactContext;
     }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void CreateDitto(string appId, string token)
     {
       var identity = DittoIdentity.OnlinePlayground(appId, token);
@@ -56,7 +56,7 @@ namespace ReactNativeStarfish
       _dittoMap[appId] = ditto;
     }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void StartDitto(string appId)
     {
       var ditto = _dittoMap[appId];
@@ -66,7 +66,7 @@ namespace ReactNativeStarfish
       }
     }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void StopDitto(string appId)
     {
       var ditto = _dittoMap[appId];
@@ -114,7 +114,7 @@ namespace ReactNativeStarfish
     [ReactEvent("onLiveQueryUpdate")]
     public Action<string, Dictionary<string, object>[]> OnLiveQueryUpdate { get; set; }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void RegisterLiveQuery(string appId, Dictionary<string, object> queryParams, bool localOnly, string liveQueryId)
     {
       var cursorOperation = ConvertQueryParamsToPendingCursor(appId, queryParams);
@@ -130,7 +130,7 @@ namespace ReactNativeStarfish
       _liveQueryAndSubscriptionsMap[liveQueryId] = new LiveQueryAndSubscription(lq, sub);
     }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void StopLiveQuery(string liveQueryId)
     {
       var liveQueryAndSubscription = _liveQueryAndSubscriptionsMap[liveQueryId];
@@ -150,7 +150,7 @@ namespace ReactNativeStarfish
     [ReactEvent("onPresenceUpdate")]
     public Action<string, string> OnPresenceUpdate { get; set; }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void RegisterPresenceObserver(string appId, string presenceObserverId)
     {
       var ditto = _dittoMap[appId];
@@ -163,13 +163,24 @@ namespace ReactNativeStarfish
       _presenceObserversMap[presenceObserverId] = o;
     }
 
-    [ReactMethod]
+    [ReactSyncMethod]
     public void StopPresenceObserver(string presenceObserverId)
     {
       var o = _presenceObserversMap[presenceObserverId];
       if (o == null) { return; }
       o.Stop();
       _presenceObserversMap.Remove(presenceObserverId);
+    }
+
+    [ReactMethod]
+    public Dictionary<string, object> GetDittoInformation(string appId)
+    {
+      var ditto = _dittoMap[appId];
+      if (ditto == null)
+      {
+        return new Dictionary<string, object>();
+      }
+      return new Dictionary<string, object> { { "sdkVersion", ditto.SDKVersion } };
     }
 
     private DittoPendingCursorOperation ConvertQueryParamsToPendingCursor(string appId, Dictionary<string, object> queryParams)
